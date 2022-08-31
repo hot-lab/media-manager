@@ -1,0 +1,12 @@
+{
+  "name": "media-manager",
+  "version": "0.1.0-alpha",
+  "main": "index.js",
+  "author": "tamaka365 <tamaka365@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "lodash": "^4.17.21"
+  }
+}
