@@ -20,7 +20,6 @@ const toCamelCase = (str) =>
 const createModuleName = (name, pre, suff, ill) => {
   const moduleName = `${pre}${name}${suff}`;
   if (/^[0-9]/.test(name)) {
-    console.log("name >>>", name);
     return toCamelCase(`${ill}${moduleName}`);
   }
   return toCamelCase(moduleName);
@@ -81,7 +80,7 @@ const createCode = (dir, config) => {
         `${prev}import ${fileName} from "${pathName}";\n` + extName === ".svg"
           ? `import ReactComponent as ${fileName.replace(/^\S/, (s) =>
               s.toUpperCase()
-            )} from "${pathName}";\n`
+            )}Component from "${pathName}";\n`
           : "",
       ""
     ) +
