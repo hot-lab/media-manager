@@ -963,10 +963,10 @@
   resolved "https://registry.npmjs.org/@nicolo-ribaudo/chokidar-2/-/chokidar-2-2.1.8-no-fsevents.3.tgz#323d72dd25103d0c4fbdce89dadf574a787b1f9b"
   integrity sha512-s88O1aVtXftvp5bCPB7WnmXc5IwOZZ7YPuwNPt+GtOOXpPvad1LfbmjYv+qII7zP6RU2QGnqve27dnLycEnyEQ==
 
-"@onelab/dev-utils@^0.1.9-beta":
-  version "0.1.9-beta"
-  resolved "https://registry.npmjs.org/@onelab/dev-utils/-/dev-utils-0.1.9-beta.tgz#0c889574e2db375e38fdc56845ceb7ee687eb4ba"
-  integrity sha512-I2OdJ69vDVe8wa2aCh6pcy6eY4tPLx/0v1KwxnwDKWuU65JgSau9aGLxrKJRv/+GJDZArU7D1vkvzIFUwF3VAQ==
+"@onelab/dev-utils@^0.1.11-beta":
+  version "0.1.11-beta"
+  resolved "https://registry.npmjs.org/@onelab/dev-utils/-/dev-utils-0.1.11-beta.tgz#53d78c0ac5860ef0d5118d5645d1b0a069eaaa4c"
+  integrity sha512-mHHCdoHlNuusWw6jHcpgZXc9xEoTsdNcMRKflfjjXukKMzkCXXtMuT9LQf8ZYrDxwwN8ovztWpTW6jaH7WyAjw==
   dependencies:
     chalk "^2.4.2"
     lodash "^4.17.21"

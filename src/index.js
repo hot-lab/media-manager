@@ -1,10 +1,10 @@
+#!/usr/bin/env node
+
 "use strict";
 
 const _ = require("lodash");
 
 const { configLoader, resolvePath, chalk } = require("@onelab/dev-utils");
-
-const config = configLoader("config.default.js", "mmConfig", "mmConfig.js");
 
 const path = require("path");
 const fs = require("fs");
@@ -27,13 +27,21 @@ const createModuleName = (name, pre, suff, ill) => {
 
 const createCode = (dir, config) => {
   const dirPath = resolvePath(dir);
-  const { fileTypes, logLevel, prefix, suffix, illegalPrefix, impportSvgAs } =
-    config;
+  const {
+    fileTypes,
+    logLevel,
+    prefix,
+    suffix,
+    illegalPrefix,
+    subdir,
+    componentName,
+  } = config;
 
   const list = fs.readdirSync(dirPath).reduce((prev, current) => {
     const pathName = path.join(dir, current);
 
     if (isDir(pathName)) {
+      // subdir
       return prev;
     }
 
@@ -51,16 +59,15 @@ const createCode = (dir, config) => {
       illegalPrefix ? `${illegalPrefix}-` : ""
     );
 
-    const isValidFileTest = /^[a-z_][0-9a-z_]+$/;
+    const isValidFileTest = /^[a-zA-Z][0-9a-zA-Z]+$/;
 
     if (!isValidFileTest.test(fileName)) {
-      const logMsg = `invalid fileName: ${pathName}`;
       switch (logLevel) {
         case "alert":
-          console.log(chalk.warn(logMsg));
+          console.log(chalk.warn("invalid fileName:"), pathName);
           break;
         case "error":
-          console.error(chalk.error(logMsg));
+          console.error(chalk.warn("invalid fileName:"), pathName);
           process.exit(1);
         default:
           break;
@@ -68,33 +75,49 @@ const createCode = (dir, config) => {
     }
 
     if (!prev.find(({ fileName: fName }) => fName === fileName)) {
-      prev.push({ pathName, fileName, extName });
+      prev.push({ pathName, fileName, type: "image" });
+      if (extName === ".svg") {
+        prev.push({
+          pathName,
+          fileName: `${fileName}Component`,
+          type: "component",
+        });
+      }
     }
 
     return prev;
   }, []);
 
   const jsCode =
-    list.reduce(
-      (prev, { fileName, pathName, extName }) =>
-        `${prev}import ${fileName} from "${pathName}";\n` + extName === ".svg"
-          ? `import ReactComponent as ${fileName.replace(/^\S/, (s) =>
-              s.toUpperCase()
-            )}Component from "${pathName}";\n`
-          : "",
-      ""
-    ) +
+    list.reduce((prev, { fileName, pathName, type }) => {
+      if (type === "component") {
+        return `${prev}import { ${componentName} as ${fileName} } from "${pathName}";\n`;
+      }
+      return `${prev}import ${fileName} from "${pathName}";\n`;
+    }, "") +
     `\nexport {${list
       .map(({ fileName }) => fileName)
       .toString()
       .replaceAll(",", ",\n  ")}};`
-      .replace("{", "{\n")
+      .replace("{", "{\n  ")
       .replace("}", "\n}");
 
   fs.writeFileSync(`${dirPath}/index.js`, jsCode);
 };
 
-config.folders.forEach(
-  (folder) =>
-    isFile(folder.path) && createCode(folder.path, _.merge(config, folder))
-);
+const run = async () => {
+  const config = await configLoader(
+    ["@onelab/mm", "dist/lib/config.default.js"],
+    "mmConfig",
+    "mmConfig.js"
+  );
+
+  const { folders, ...configs } = config;
+
+  folders.forEach(
+    (folder) =>
+      isFile(folder.path) && createCode(folder.path, _.merge(configs, folder))
+  );
+};
+
+run();
