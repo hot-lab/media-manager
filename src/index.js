@@ -25,8 +25,22 @@ const createModuleName = (name, pre, suff, ill) => {
   return toCamelCase(moduleName);
 };
 
-const createCode = (dir, config) => {
+const readFileList = (dir, subdir) => {
   const dirPath = resolvePath(dir);
+  return fs
+    .readdirSync(dirPath)
+    .map((filePath) => {
+      const pathName = path.join(dir, filePath);
+      if (isDir(pathName)) {
+        return subdir ? readFileList(pathName) : [];
+      }
+
+      return pathName;
+    })
+    .flat();
+};
+
+const createCode = (dir, config) => {
   const {
     fileTypes,
     logLevel,
@@ -37,14 +51,9 @@ const createCode = (dir, config) => {
     componentName,
   } = config;
 
-  const list = fs.readdirSync(dirPath).reduce((prev, current) => {
-    const pathName = path.join(dir, current);
+  const fileList = readFileList(dir, subdir);
 
-    if (isDir(pathName)) {
-      // subdir
-      return prev;
-    }
-
+  const list = fileList.reduce((prev, pathName) => {
     const { ext, name } = path.parse(pathName);
     const extName = ext.toLowerCase();
 
@@ -88,6 +97,8 @@ const createCode = (dir, config) => {
     return prev;
   }, []);
 
+  console.log("list >>>", list);
+
   const jsCode =
     list.reduce((prev, { fileName, pathName, type }) => {
       if (type === "component") {
@@ -102,6 +113,7 @@ const createCode = (dir, config) => {
       .replace("{", "{\n  ")
       .replace("}", "\n}");
 
+  const dirPath = resolvePath(dir);
   fs.writeFileSync(`${dirPath}/index.js`, jsCode);
 };
 
