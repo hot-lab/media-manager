@@ -97,8 +97,6 @@ const createCode = (dir, config) => {
     return prev;
   }, []);
 
-  console.log("list >>>", list);
-
   const jsCode =
     list.reduce((prev, { fileName, pathName, type }) => {
       if (type === "component") {
