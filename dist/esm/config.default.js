@@ -1,0 +1,35 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var module = {
+  exports: {}
+};
+var exports = module.exports;
+module.exports = {
+  fileTypes: [".png", ".jpg", ".jpeg", ".svg", ".webp", ".gif"],
+  // 需要加载的文件类型
+  prefix: "",
+  // 需要添加的前缀
+  suffix: "",
+  // 需要添加的后缀
+  illegalPrefix: "image",
+  // 当存在非法开头时（如数字）添加的前缀
+  logLevel: "alert",
+  // 当存在非法开头时如何处理，alert：警告，error 抛错，none：不处理
+  subdir: false,
+  // 是否遍历子目录
+  componentName: "ReactComponent",
+  // 上面这些配置项都可以添加到 每个 folder
+  folders: [{
+    path: "src/assets/img",
+    suffix: "Img"
+  }, {
+    path: "src/assets/icon",
+    suffix: "Icon"
+  }]
+};
+var _default = module.exports;
+exports["default"] = _default;
