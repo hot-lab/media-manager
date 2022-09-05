@@ -1,12 +1,64 @@
 {
-  "name": "media-manager",
-  "version": "0.1.0-alpha",
-  "main": "index.js",
+  "name": "@onelab/mm",
+  "version": "0.1.1",
   "author": "tamaka365 <tamaka365@gmail.com>",
   "license": "MIT",
   "private": false,
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/esm/index.js",
+      "default": "./dist/lib/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./*": {
+      "import": "./dist/esm/*.js",
+      "default": "./dist/lib/*.js",
+      "types": "./dist/types/*.d.ts"
+    }
+  },
+  "files": [
+    "dist/esm/",
+    "dist/lib/",
+    "dist/types/"
+  ],
+  "main": "dist/lib/index.js",
+  "module": "dist/esm/index.js",
+  "bin": {
+    "mm": "./dist/lib/index.js"
+  },
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "sideEffects": false,
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "scripts": {
+    "build": "yarn build:lib && yarn build:esm && yarn build:types",
+    "build:esm": "babel src -d dist/esm --extensions '.js,.jsx,.ts,.tsx' --copy-files --plugins=transform-commonjs",
+    "build:lib": "babel src -d dist/lib --extensions '.js,.jsx,.ts,.tsx' --copy-files --plugins=@babel/transform-modules-commonjs",
+    "build:types": "tsc src/*.js --declaration --emitDeclarationOnly --allowJs --outDir dist/types"
+  },
   "dependencies": {
-    "chalk": "^2.4.2",
-    "lodash": "^4.17.21"
-  }
+    "@onelab/dev-utils": "^0.1.11-beta"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.13",
+    "@babel/preset-env": "^7.18.10",
+    "babel-plugin-transform-commonjs": "^1.1.6",
+    "typescript": "^4.8.2"
+  },
+  "description": "media-manager",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hot-lab/media-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hot-lab/media-manager/issues"
+  },
+  "homepage": "https://github.com/hot-lab/media-manager#readme"
 }
